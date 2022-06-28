@@ -1,4 +1,4 @@
-# flutterdemo
+# honeycomb
 
 A new Flutter project.
 
