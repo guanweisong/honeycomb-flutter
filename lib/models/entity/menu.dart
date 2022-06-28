@@ -10,6 +10,7 @@ class Menu {
   String? categoryTitle;
   String? categoryTitleEn;
   List<Menu>? children;
+  double? deep;
 
   Menu(
       {required this.id,
@@ -22,7 +23,8 @@ class Menu {
       this.categoryTitle,
       this.categoryTitleEn,
       this.pageTitle,
-      this.children});
+      this.children,
+      this.deep});
 
   Menu.fromJson(Map<String, dynamic> json) {
     id = json["_id"].toString();
@@ -30,7 +32,6 @@ class Menu {
     type = json["type"].toInt();
     updatedAt = json["updated_at"].toString();
     createdAt = json["created_at"].toString();
-    v = json["__v"].toInt();
     parent = json["parent"]?.toString() ?? '0';
     categoryTitle = json["category_title"]?.toString();
     categoryTitleEn = json["category_title_en"]?.toString();
@@ -44,7 +45,6 @@ class Menu {
     data["type"] = type;
     data["updated_at"] = updatedAt;
     data["created_at"] = createdAt;
-    data["__v"] = v;
     data["category_title"] = categoryTitle;
     data["category_title_en"] = categoryTitleEn;
     data["page_title"] = pageTitle;

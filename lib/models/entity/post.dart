@@ -9,7 +9,7 @@ class Post {
   List<Tag>? movieDirector;
   String? movieNameEn;
   String? movieTime;
-  late PostCover postCover;
+  PostCover? postCover;
   late int postType;
   late int commentStatus;
   late int postStatus;
@@ -17,6 +17,9 @@ class Post {
   late PostCategory postCategory;
   String? postContent;
   String? postTitle;
+  String? quoteAuthor;
+  String? quoteContent;
+  String? galleryLocation;
   late String updatedAt;
   late String createdAt;
 
@@ -37,6 +40,9 @@ class Post {
     required this.postCategory,
     this.postContent,
     this.postTitle,
+    this.quoteAuthor,
+    this.quoteContent,
+    this.galleryLocation,
     required this.updatedAt,
     required this.createdAt,
   });
@@ -52,17 +58,27 @@ class Post {
   Post.fromJson(Map<String, dynamic> json) {
     id = json["_id"].toString();
     postViews = json["post_views"].toInt();
-    galleryStyle = List<Tag>.from(
-        json["gallery_style"]?.map((item) => Tag.fromJson(item)).toList());
-    movieStyle = List<Tag>.from(
-        json["movie_style"]?.map((item) => Tag.fromJson(item)).toList());
-    movieActor = List<Tag>.from(
-        json["movie_actor"]?.map((item) => Tag.fromJson(item)).toList());
-    movieDirector = List<Tag>.from(
-        json["movie_director"]?.map((item) => Tag.fromJson(item)).toList());
+    if (json["gallery_style"] != null) {
+      galleryStyle = List<Tag>.from(
+          json["gallery_style"]?.map((item) => Tag.fromJson(item)).toList());
+    }
+    if (json["movie_style"] != null) {
+      movieStyle = List<Tag>.from(
+          json["movie_style"]?.map((item) => Tag.fromJson(item)).toList());
+    }
+    if (json["movie_actor"] != null) {
+      movieActor = List<Tag>.from(
+          json["movie_actor"]?.map((item) => Tag.fromJson(item)).toList());
+    }
+    if (json["movie_director"] != null) {
+      movieDirector = List<Tag>.from(
+          json["movie_director"]?.map((item) => Tag.fromJson(item)).toList());
+    }
     movieNameEn = json["movie_name_en"]?.toString();
     movieTime = json["movie_time"]?.toString();
-    postCover = PostCover.fromJson(json["post_cover"]);
+    if (json["post_cover"] != null) {
+      postCover = PostCover.fromJson(json["post_cover"]);
+    }
     postType = json["post_type"].toInt();
     commentStatus = json["comment_status"].toInt();
     postStatus = json["post_status"].toInt();
@@ -70,6 +86,9 @@ class Post {
     postCategory = PostCategory.fromJson(json["post_category"]);
     postContent = json["post_content"]?.toString();
     postTitle = json["post_title"]?.toString();
+    quoteAuthor = json["quote_author"]?.toString();
+    quoteContent = json["quote_content"]?.toString();
+    galleryLocation = json["gallery_location"]?.toString();
     updatedAt = json["updated_at"].toString();
     createdAt = json["created_at"].toString();
   }
@@ -96,7 +115,7 @@ class Post {
     if (movieTime != null) {
       data["movie_time"] = movieTime;
     }
-    data["post_cover"] = postCover.toJson();
+    data["post_cover"] = postCover?.toJson();
     data["post_type"] = postType;
     data["comment_status"] = commentStatus;
     data["post_status"] = postStatus;
@@ -107,6 +126,15 @@ class Post {
     }
     if (postTitle != null) {
       data["post_title"] = postTitle;
+    }
+    if (quoteAuthor != null) {
+      data["quote_author"] = quoteAuthor;
+    }
+    if (quoteContent != null) {
+      data["quote_content"] = quoteContent;
+    }
+    if (galleryLocation != null) {
+      data["gallery_location"] = galleryLocation;
     }
     data["updated_at"] = updatedAt;
     data["created_at"] = createdAt;

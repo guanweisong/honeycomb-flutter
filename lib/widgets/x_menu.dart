@@ -38,9 +38,11 @@ class _XMenuState extends State<XMenu> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.only(top: 12, bottom: 12),
+                padding:
+                    EdgeInsets.only(left: 12 * item.deep!, top: 12, bottom: 12),
                 child: Text(
-                    item.type == 0 ? item.categoryTitle! : item.pageTitle!),
+                    item.type == 0 ? item.categoryTitle! : item.pageTitle!,
+                    style: renderMenuCurrentItem(item.id)),
               ),
               Container(
                 height: 1,
@@ -65,17 +67,30 @@ class _XMenuState extends State<XMenu> {
     return items;
   }
 
+  // 菜单选中样式
+  renderMenuCurrentItem(String id) {
+    if (Get.parameters['category_id'] == id || Get.parameters['id'] == id) {
+      return const TextStyle(color: Color.fromRGBO(235, 0, 93, 1));
+    } else {
+      return const TextStyle();
+    }
+  }
+
   // 菜单跳转事件
   handleJump(Menu menu) {
+    Get.back();
     switch (menu.type) {
       case 0:
-        Get.back();
         Get.toNamed(
           Routes.list,
           parameters: <String, String>{"category_id": menu.id},
         );
         break;
       case 1:
+        Get.toNamed(
+          Routes.page,
+          parameters: <String, String>{"id": menu.id},
+        );
         break;
     }
   }
@@ -98,6 +113,17 @@ class _XMenuState extends State<XMenu> {
         roots.add(node);
       }
     }
+    // 增加deep层级值
+    addDeepMark(List<Menu> menu, double deep) {
+      for (var item in menu) {
+        item.deep = deep;
+        if (item.children!.isNotEmpty) {
+          addDeepMark(item.children!, deep + 1);
+        }
+      }
+    }
+
+    addDeepMark(roots, 0);
     return roots;
   }
 }

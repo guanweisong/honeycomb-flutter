@@ -21,6 +21,7 @@ class PostPage extends GetView {
       appBar: XAppBar(title: settingController.setting?.siteName ?? ''),
       body: GetBuilder<PostController>(
         init: PostController(),
+        global: false,
         builder: (controller) {
           if (controller.postDetail != null) {
             return Container(
@@ -51,22 +52,26 @@ class PostPage extends GetView {
   }
 
   renderContent(PostController post) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          width: double.infinity,
-          child: Text(
-            post.postDetail!.getTitle(),
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 18,
+    List<Widget> column = [];
+    switch (post.postDetail?.postType) {
+      case 0:
+      case 1:
+      case 2:
+        column.add(
+          SizedBox(
+            width: double.infinity,
+            child: Text(
+              post.postDetail!.getTitle(),
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 18,
+              ),
             ),
           ),
-        ),
-        renderInfo(post),
-        renderLine(),
-        Html(
+        );
+        column.add(renderInfo(post));
+        column.add(renderLine());
+        column.add(Html(
           data: post.postDetail!.postContent,
           customImageRenders: {
             (attr, _) => true: networkImageRender(
@@ -81,11 +86,24 @@ class PostPage extends GetView {
               mapUrl: (url) => url!.contains('https') ? url : "https:$url",
             ),
           },
-        ),
-        renderLine(),
-        renderExtra(post),
-        renderTags(post),
-      ],
+        ));
+        column.add(renderLine());
+        column.add(renderExtra(post));
+        column.add(renderTags(post));
+        break;
+      case 3:
+        column.add(renderInfo(post));
+        column.add(renderLine());
+        column.add(Container(
+            padding: const EdgeInsets.only(top: 10, bottom: 10),
+            child: Text(post.postDetail!.quoteContent!)));
+        column.add(renderLine());
+        column.add(renderExtra(post));
+        break;
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: column,
     );
   }
 
@@ -112,7 +130,7 @@ class PostPage extends GetView {
     ));
     list.add(IconText(
       icon: const Icon(Icons.message_rounded, size: 14),
-      text: "条留言",
+      text: "${post.commentTotal ?? ''}条留言",
     ));
     list.add(IconText(
       icon: const Icon(Icons.remove_red_eye_rounded, size: 14),
@@ -150,6 +168,8 @@ class PostPage extends GetView {
   // 渲染文章额外信息
   renderExtra(PostController post) {
     switch (post.postDetail!.postType) {
+      case 0:
+        return null;
       case 1:
         return Opacity(
           opacity: 0.8,
@@ -175,23 +195,62 @@ class PostPage extends GetView {
           ),
         );
       case 2:
-        return Text('2');
+        return Opacity(
+          opacity: 0.8,
+          child: Row(
+            children: [
+              const Icon(
+                Icons.photo_camera,
+                size: 14,
+              ),
+              Container(
+                margin: const EdgeInsets.only(
+                  left: 5,
+                  right: 5,
+                ),
+                child: const Text("拍摄于"),
+              ),
+              Text(post.postDetail!.galleryLocation!),
+            ],
+          ),
+        );
       case 3:
-        return Text('2');
+        return Opacity(
+          opacity: 0.8,
+          child: Row(
+            children: [
+              const Icon(
+                Icons.article_rounded,
+                size: 14,
+              ),
+              Container(
+                margin: const EdgeInsets.only(
+                  left: 5,
+                  right: 5,
+                ),
+                child: const Text("节选自"),
+              ),
+              Text(post.postDetail!.quoteAuthor!),
+            ],
+          ),
+        );
     }
   }
 
   // 渲染tag信息
   renderTags(PostController post) {
     List<Tags> list = [];
-    if (post.postDetail!.movieDirector != null) {
+    if (post.postDetail!.movieDirector!.isNotEmpty) {
       list.add(Tags(label: '导演', tags: post.postDetail!.movieDirector!));
     }
-    if (post.postDetail!.movieActor != null) {
+    if (post.postDetail!.movieActor!.isNotEmpty) {
       list.add(Tags(label: '演员', tags: post.postDetail!.movieActor!));
     }
-    if (post.postDetail!.movieStyle != null) {
+    if (post.postDetail!.movieStyle!.isNotEmpty) {
       list.add(Tags(label: '风格', tags: post.postDetail!.movieStyle!));
+    }
+    if (post.postDetail!.galleryStyle!.isNotEmpty) {
+      list.add(Tags(label: '风格', tags: post.postDetail!.galleryStyle!));
     }
     List<Widget> items = [];
     for (var item in list) {

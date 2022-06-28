@@ -1,37 +1,37 @@
 import 'package:honeycomb_flutter/models/entity/comment.dart';
+import 'package:honeycomb_flutter/models/entity/page.dart';
 import 'package:honeycomb_flutter/models/response/base_response.dart';
 import 'package:honeycomb_flutter/models/response/query_comment_list_response.dart';
 import 'package:honeycomb_flutter/models/response/query_views_response.dart';
 import 'package:get/get.dart';
 import 'package:honeycomb_flutter/utils/api.dart';
-import '../../models/entity/post.dart';
 
-class PostController extends GetxController {
-  Post? postDetail;
+class PagePageController extends GetxController {
+  Page? pageDetail;
   int? views;
   List<Comment>? commentList;
   int? commentTotal;
 
   @override
   onReady() {
-    getPostDetail();
-    getPostViews();
+    getPageDetail();
+    getPageViews();
     getComments();
   }
 
-  // 查询文章详情
-  getPostDetail() async {
-    var res = await queryPostDetail(Get.parameters);
+  // 查询页面详情
+  getPageDetail() async {
+    var res = await queryPageDetail(Get.parameters);
     var response = BaseResponse.fromJson(res);
     if (response.isSuccess()) {
-      postDetail = Post.fromJson(response.data);
+      pageDetail = Page.fromJson(response.data);
       update();
     }
   }
 
-  // 查询文章浏览量
-  getPostViews() async {
-    var res = await queryPostViews(Get.parameters);
+  // 查询页面浏览量
+  getPageViews() async {
+    var res = await queryPageViews(Get.parameters);
     var response = BaseResponse.fromJson(res);
     if (response.isSuccess()) {
       views = QueryViewsResponse.fromJson(response.data).count;

@@ -81,6 +81,39 @@ class ListPage extends GetView {
   }
 
   renderItem(Post subject) {
+    List<Widget> column = [];
+    switch (subject.postType) {
+      case 0:
+      case 1:
+      case 2:
+        column.add(SizedBox(
+          child: Image.network(
+            'https://${subject.postCover?.mediaUrl}?imageMogr2/thumbnail/750x',
+            fit: BoxFit.cover,
+          ),
+        ));
+        column.add(Container(
+          margin: const EdgeInsets.only(top: 12),
+          width: double.infinity,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                subject.getTitle(),
+                style: const TextStyle(
+                  fontSize: 16.0,
+                ),
+                maxLines: 1,
+              ),
+            ],
+          ),
+        ));
+        break;
+      case 3:
+        column.add(Text(subject.quoteContent!));
+        break;
+    }
+
     return InkWell(
       onTap: () {
         Get.toNamed(Routes.post,
@@ -91,30 +124,7 @@ class ListPage extends GetView {
         padding: const EdgeInsets.all(12),
         color: const Color.fromRGBO(255, 255, 255, 1),
         child: Column(
-          children: <Widget>[
-            SizedBox(
-              child: Image.network(
-                'https://${subject.postCover.mediaUrl}?imageMogr2/thumbnail/750x',
-                fit: BoxFit.cover,
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 12),
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    subject.getTitle(),
-                    style: const TextStyle(
-                      fontSize: 16.0,
-                    ),
-                    maxLines: 1,
-                  ),
-                ],
-              ),
-            )
-          ],
+          children: column,
         ),
       ),
     );

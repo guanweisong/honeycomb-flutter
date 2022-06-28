@@ -26,7 +26,17 @@ Future<Response> queryPostViews(parameters) {
   return dio.get('/posts/${parameters['id']}/views');
 }
 
-// 获取文章评论列表
+// 获取评论列表
 Future<Response> queryComments(parameters) {
   return dio.get('/comments/${parameters['id']}');
+}
+
+// 获取页面详情
+Future<Response> queryPageDetail(parameters) {
+  return dio.get('/pages/${parameters['id']}');
+}
+
+// 获取页面浏览量
+Future<Response> queryPageViews(parameters) {
+  return dio.get('/pages/${parameters['id']}/views');
 }
