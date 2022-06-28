@@ -101,7 +101,7 @@ class ListPage extends GetView {
               Text(
                 subject.getTitle(),
                 style: const TextStyle(
-                  fontSize: 16.0,
+                  fontSize: 14.0,
                 ),
                 maxLines: 1,
               ),

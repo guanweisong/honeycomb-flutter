@@ -138,7 +138,7 @@ class PagePage extends GetView {
     return Container(
       margin: const EdgeInsets.only(top: 10),
       child: Opacity(
-        opacity: 0.7,
+        opacity: 0.5,
         child: Column(children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,

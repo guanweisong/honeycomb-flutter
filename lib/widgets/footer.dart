@@ -9,7 +9,7 @@ class Footer extends GetView {
     return Container(
       padding: const EdgeInsets.all(20),
       child: Opacity(
-        opacity: 0.7,
+        opacity: 0.5,
         child: Column(
           children: [
             Container(
@@ -17,6 +17,7 @@ class Footer extends GetView {
               child: Text(
                 settingController.setting?.siteSignature ?? '',
                 textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
               ),
             ),
             Container(
@@ -24,6 +25,7 @@ class Footer extends GetView {
               child: Text(
                 settingController.setting?.siteCopyright ?? '',
                 textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12),
               ),
             ),
           ],

@@ -29,6 +29,7 @@ class XAppBarState extends State<XAppBar> {
         widget.title!,
         style: const TextStyle(color: Color.fromRGBO(0, 0, 0, 0.8)),
       ),
+      centerTitle: true,
     );
   }
 }

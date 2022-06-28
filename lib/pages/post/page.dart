@@ -64,7 +64,7 @@ class PostPage extends GetView {
               post.postDetail!.getTitle(),
               textAlign: TextAlign.center,
               style: const TextStyle(
-                fontSize: 18,
+                fontSize: 16,
               ),
             ),
           ),
@@ -154,7 +154,7 @@ class PostPage extends GetView {
     return Container(
       margin: const EdgeInsets.only(top: 10),
       child: Opacity(
-        opacity: 0.7,
+        opacity: 0.5,
         child: Column(children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -172,7 +172,7 @@ class PostPage extends GetView {
         return null;
       case 1:
         return Opacity(
-          opacity: 0.8,
+          opacity: 0.5,
           child: Row(
             children: [
               const Icon(
@@ -196,7 +196,7 @@ class PostPage extends GetView {
         );
       case 2:
         return Opacity(
-          opacity: 0.8,
+          opacity: 0.5,
           child: Row(
             children: [
               const Icon(
@@ -216,7 +216,7 @@ class PostPage extends GetView {
         );
       case 3:
         return Opacity(
-          opacity: 0.8,
+          opacity: 0.5,
           child: Row(
             children: [
               const Icon(
@@ -266,8 +266,9 @@ class PostPage extends GetView {
           ),
         );
       }
-      items.add(
-        Wrap(children: [
+      items.add(Opacity(
+        opacity: 0.8,
+        child: Wrap(children: [
           Container(
             margin: const EdgeInsets.only(right: 4),
             child: Text(
@@ -282,7 +283,7 @@ class PostPage extends GetView {
             children: tagList,
           )
         ]),
-      );
+      ));
     }
     return Container(
       margin: const EdgeInsets.only(top: 8),
