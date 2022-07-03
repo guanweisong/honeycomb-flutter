@@ -1,10 +1,8 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:honeycomb_flutter/widgets/footer.dart';
 import 'package:honeycomb_flutter/widgets/x_menu.dart';
 
-class XScaffold extends StatefulWidget {
+class XScaffold extends StatelessWidget {
   bool? scroll;
   bool? showFooter;
   PreferredSizeWidget appBar;
@@ -19,18 +17,13 @@ class XScaffold extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<XScaffold> createState() => _XScaffoldState();
-}
-
-class _XScaffoldState extends State<XScaffold> {
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: widget.appBar,
+      appBar: appBar,
       endDrawer: Drawer(
         child: XMenu(),
       ),
-      body: widget.scroll == true
+      body: scroll == true
           ? SingleChildScrollView(
               child: renderBody(),
             )
@@ -39,8 +32,8 @@ class _XScaffoldState extends State<XScaffold> {
   }
 
   renderBody() {
-    if (widget.showFooter == true) {
-      List<Widget> children = [widget.body];
+    if (showFooter == true) {
+      List<Widget> children = [body];
       children.add(Footer());
       return SafeArea(
         child: Column(
@@ -49,7 +42,7 @@ class _XScaffoldState extends State<XScaffold> {
       );
     } else {
       return SafeArea(
-        child: widget.body,
+        child: body,
       );
     }
   }

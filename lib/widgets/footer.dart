@@ -14,18 +14,22 @@ class Footer extends GetView {
           children: [
             Container(
               margin: const EdgeInsets.only(top: 0),
-              child: Text(
-                settingController.setting?.siteSignature ?? '',
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
+              child: Obx(
+                () => Text(
+                  settingController.setting.value.siteSignature ?? "",
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 12),
+                ),
               ),
             ),
             Container(
               margin: const EdgeInsets.only(top: 4),
-              child: Text(
-                settingController.setting?.siteCopyright ?? '',
-                textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 12),
+              child: Obx(
+                () => Text(
+                  settingController.setting.value.siteCopyright ?? '',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 12),
+                ),
               ),
             ),
           ],

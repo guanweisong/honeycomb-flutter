@@ -4,7 +4,7 @@ import 'package:honeycomb_flutter/utils/api.dart';
 import 'package:get/get.dart';
 
 class SettingController extends GetxController {
-  Setting? setting;
+  final setting = Setting().obs;
 
   @override
   onReady() {
@@ -16,8 +16,7 @@ class SettingController extends GetxController {
     var res = await querySetting();
     var response = BaseResponse.fromJson(res);
     if (response.isSuccess()) {
-      setting = Setting.fromJson(response.data[0]);
-      update();
+      setting.value = Setting.fromJson(response.data[0]);
     }
   }
 }

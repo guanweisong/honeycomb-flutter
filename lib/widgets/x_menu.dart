@@ -4,16 +4,11 @@ import 'package:honeycomb_flutter/models/entity/menu.dart';
 import 'package:honeycomb_flutter/routes/app_routes.dart';
 import 'package:get/get.dart';
 
-class XMenu extends StatefulWidget {
-  @override
-  State<XMenu> createState() => _XMenuState();
-}
-
-class _XMenuState extends State<XMenu> {
+class XMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MenuController menuController = Get.find<MenuController>();
-    List<Menu> menuTree = fromListToMenu(menuController.menu!, '0');
+    List<Menu> menuTree = fromListToMenu(menuController.menu ?? [], '0');
     return Container(
       padding: const EdgeInsets.all(20),
       child: SafeArea(

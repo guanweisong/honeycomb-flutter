@@ -19,7 +19,6 @@ class MenuController extends GetxController {
     if (response.isSuccess()) {
       var result = QueryMenuListResponse.fromJson(response.data);
       menu = result.list;
-      update();
     }
   }
 }

@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:honeycomb_flutter/controllers/setting_controller.dart';
 import 'package:honeycomb_flutter/models/tags.dart';
 import 'package:get/get.dart';
+import 'package:honeycomb_flutter/widgets/post_skeleton.dart';
 import 'package:intl/intl.dart';
 import 'package:honeycomb_flutter/pages/post/controller.dart';
 import 'package:honeycomb_flutter/widgets/x_scaffold.dart';
 import 'package:honeycomb_flutter/widgets/x_app_bar.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:honeycomb_flutter/models/icon_text.dart';
+import 'package:honeycomb_flutter/widgets/post_info.dart';
+import 'package:skeletons/skeletons.dart';
 
 class PostPage extends GetView {
   const PostPage({Key? key}) : super(key: key);
@@ -18,7 +20,14 @@ class PostPage extends GetView {
     return XScaffold(
       scroll: true,
       showFooter: true,
-      appBar: XAppBar(title: settingController.setting?.siteName ?? ''),
+      appBar: XAppBar(
+        title: Obx(
+          () => Text(
+            settingController.setting.value.siteName ?? "",
+            style: TextStyle(color: Colors.black.withOpacity(0.8)),
+          ),
+        ),
+      ),
       body: GetBuilder<PostController>(
         init: PostController(),
         global: false,
@@ -34,23 +43,14 @@ class PostPage extends GetView {
               ),
             );
           } else {
-            return Container(
-              padding: const EdgeInsets.only(top: 100),
-              width: double.infinity,
-              child: const Text(
-                'Loading...',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Color.fromRGBO(0, 0, 0, 0.5),
-                ),
-              ),
-            );
+            return PostSkeleton();
           }
         },
       ),
     );
   }
 
+  // 渲染正文
   renderContent(PostController post) {
     List<Widget> column = [];
     switch (post.postDetail?.postType) {
@@ -77,10 +77,11 @@ class PostPage extends GetView {
             (attr, _) => true: networkImageRender(
               loadingWidget: () => const SizedBox(
                 width: double.infinity,
-                child: Text(
-                  'Loading...',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Color.fromRGBO(0, 0, 0, 0.5)),
+                child: SkeletonAvatar(
+                  style: SkeletonAvatarStyle(
+                    width: double.infinity,
+                    height: 200,
+                  ),
                 ),
               ),
               mapUrl: (url) => url!.contains('https') ? url : "https:$url",
@@ -118,50 +119,11 @@ class PostPage extends GetView {
 
   // 渲染文章常用信息
   renderInfo(PostController post) {
-    List<IconText> list = [];
-    list.add(IconText(
-      icon: const Icon(Icons.person, size: 14),
-      text: post.postDetail!.postAuthor.userName,
-    ));
-    list.add(IconText(
-      icon: const Icon(Icons.date_range_rounded, size: 14),
-      text: DateFormat('yyyy-MM-dd')
-          .format(DateTime.parse(post.postDetail!.createdAt)),
-    ));
-    list.add(IconText(
-      icon: const Icon(Icons.message_rounded, size: 14),
-      text: "${post.commentTotal ?? ''}条留言",
-    ));
-    list.add(IconText(
-      icon: const Icon(Icons.remove_red_eye_rounded, size: 14),
-      text: "${post.views ?? ''}次浏览",
-    ));
-    List<Widget> items = [];
-    for (var item in list) {
-      items.add(
-        Row(children: [
-          Container(
-            margin: const EdgeInsets.only(right: 2),
-            child: item.icon,
-          ),
-          Text(
-            item.text,
-            style: const TextStyle(fontSize: 14),
-          ),
-        ]),
-      );
-    }
-    return Container(
-      margin: const EdgeInsets.only(top: 10),
-      child: Opacity(
-        opacity: 0.5,
-        child: Column(children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: items,
-          ),
-        ]),
-      ),
+    return PostInfo(
+      userName: post.postDetail!.postAuthor.userName,
+      createdAt: post.postDetail!.createdAt,
+      commentTotal: post.commentTotal ?? 0,
+      views: post.views ?? 0,
     );
   }
 

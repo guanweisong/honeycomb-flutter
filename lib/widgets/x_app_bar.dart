@@ -1,21 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class XAppBar extends StatefulWidget implements PreferredSizeWidget {
-  String? title;
+class XAppBar extends StatelessWidget implements PreferredSizeWidget {
+  Widget title;
 
-  XAppBar({Key? key, this.title}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() {
-    return XAppBarState();
-  }
+  XAppBar({Key? key, required this.title}) : super(key: key);
 
   @override
   Size get preferredSize => const Size(double.infinity, 50);
-}
 
-class XAppBarState extends State<XAppBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -25,10 +18,7 @@ class XAppBarState extends State<XAppBar> {
           Get.back();
         },
       ),
-      title: Text(
-        widget.title!,
-        style: const TextStyle(color: Color.fromRGBO(0, 0, 0, 0.8)),
-      ),
+      title: title,
       centerTitle: true,
     );
   }

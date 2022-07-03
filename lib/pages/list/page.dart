@@ -7,6 +7,7 @@ import 'package:honeycomb_flutter/pages/list/controller.dart';
 import 'package:honeycomb_flutter/widgets/x_scaffold.dart';
 import 'package:honeycomb_flutter/widgets/x_app_bar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:skeletons/skeletons.dart';
 
 import '../../models/entity/post.dart';
 
@@ -44,23 +45,15 @@ class ListPage extends GetView {
     MenuController menuController = Get.find<MenuController>();
     SettingController settingController = Get.find<SettingController>();
     return XScaffold(
-      appBar: XAppBar(title: getTitle(menuController, settingController)),
+      appBar: XAppBar(
+        title: Obx(() => getTitle(menuController, settingController)),
+      ),
       body: GetBuilder<ListController>(
         init: ListController(),
         global: false,
         builder: (controller) {
           return controller.postList == null
-              ? Container(
-                  padding: const EdgeInsets.only(top: 100),
-                  width: double.infinity,
-                  child: const Text(
-                    'Loading...',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Color.fromRGBO(0, 0, 0, 0.5),
-                    ),
-                  ),
-                )
+              ? renderSkeleton()
               : SmartRefresher(
                   enablePullDown: true,
                   enablePullUp: true,
@@ -80,6 +73,37 @@ class ListPage extends GetView {
     );
   }
 
+  // 渲染骨架屏
+  renderSkeleton() {
+    return ListView.builder(
+      itemCount: 5,
+      itemBuilder: (context, index) => SkeletonItem(
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            children: const [
+              SkeletonAvatar(
+                style: SkeletonAvatarStyle(
+                  width: double.infinity,
+                  height: 200,
+                ),
+              ),
+              SizedBox(height: 12),
+              SkeletonLine(
+                style: SkeletonLineStyle(
+                  height: 16,
+                  width: 200,
+                  alignment: AlignmentDirectional.center,
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // 渲染列表卡片
   renderItem(Post subject) {
     List<Widget> column = [];
     switch (subject.postType) {
@@ -131,17 +155,21 @@ class ListPage extends GetView {
   }
 
   // 获取列表标题
-  getTitle(
-      MenuController? menuController, SettingController? settingController) {
+  getTitle(MenuController menuController, SettingController settingController) {
     String? id = Get.parameters["category_id"];
-    String? title = settingController?.setting?.siteName ?? "";
-    if (id != null && menuController?.menu != null) {
-      for (var item in menuController!.menu!) {
+    String title = settingController.setting.value.siteName ?? "";
+    if (id != null && menuController.menu != null) {
+      for (var item in menuController.menu!) {
         if (item.id == id) {
           title = item.categoryTitle!;
         }
       }
     }
-    return title;
+    return Text(
+      title,
+      style: TextStyle(
+        color: Colors.black.withOpacity(0.8),
+      ),
+    );
   }
 }
