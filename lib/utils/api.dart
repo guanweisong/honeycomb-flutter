@@ -16,6 +16,12 @@ Future<Response> queryPostList(parameters) {
   return dio.get('/posts', queryParameters: parameters);
 }
 
+// 获取随机文章列表
+Future<Response> queryRandomPostList(String postCategory, int number) {
+  return dio.get('/posts/random',
+      queryParameters: {"post_category": postCategory, "number": number});
+}
+
 // 获取文章详情
 Future<Response> queryPostDetail(parameters) {
   return dio.get('/posts/${parameters['id']}');

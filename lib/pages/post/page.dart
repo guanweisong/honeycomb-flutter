@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:honeycomb_flutter/controllers/setting_controller.dart';
 import 'package:honeycomb_flutter/models/tags.dart';
 import 'package:get/get.dart';
+import 'package:honeycomb_flutter/routes/app_routes.dart';
 import 'package:honeycomb_flutter/widgets/post_skeleton.dart';
 import 'package:intl/intl.dart';
 import 'package:honeycomb_flutter/pages/post/controller.dart';
@@ -101,6 +102,10 @@ class PostPage extends GetView {
         column.add(renderLine());
         column.add(renderExtra(post));
         break;
+    }
+    if (post.ramdonList.isNotEmpty) {
+      column.add(renderLine());
+      column.add(renderRandomPostList(post));
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -253,6 +258,48 @@ class PostPage extends GetView {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: items,
+      ),
+    );
+  }
+
+  // 渲染随机文章列表
+  renderRandomPostList(PostController post) {
+    List<Widget> list = [];
+    list.add(
+      Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        child: const Text(
+          '猜你喜欢',
+          style: TextStyle(
+            fontSize: 16,
+          ),
+        ),
+      ),
+    );
+    for (var item in post.ramdonList) {
+      list.add(
+        InkWell(
+          onTap: () => {
+            Get.toNamed(Routes.post,
+                parameters: <String, String>{"id": item!.id})
+          },
+          child: Container(
+            width: double.infinity,
+            padding: const EdgeInsets.only(top: 3, bottom: 3),
+            child: Wrap(
+              children: [
+                Text('• ${item?.postTitle ?? item?.quoteContent ?? ""}'),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+    return Container(
+      margin: const EdgeInsets.only(top: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: list,
       ),
     );
   }
